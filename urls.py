@@ -4,8 +4,16 @@ from . import views
 app_name = 'data_export'
 
 urlpatterns = [
+    # Dashboard
     path('', views.dashboard, name='dashboard'),
-    path('import/', views.import, name='import'),
-    path('export/', views.export, name='export'),
-    path('settings/', views.settings, name='settings'),
+
+    # DataJob
+    path('data_jobs/', views.data_jobs_list, name='data_jobs_list'),
+    path('data_jobs/add/', views.data_job_add, name='data_job_add'),
+    path('data_jobs/<uuid:pk>/edit/', views.data_job_edit, name='data_job_edit'),
+    path('data_jobs/<uuid:pk>/delete/', views.data_job_delete, name='data_job_delete'),
+    path('data_jobs/bulk/', views.data_jobs_bulk_action, name='data_jobs_bulk_action'),
+
+    # Settings
+    path('settings/', views.settings_view, name='settings'),
 ]
