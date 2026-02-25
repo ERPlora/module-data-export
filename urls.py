@@ -7,6 +7,11 @@ urlpatterns = [
     # Dashboard
     path('', views.dashboard, name='dashboard'),
 
+    # Navigation tab aliases
+    path('import/', views.data_jobs_list, name='import'),
+    path('export/', views.dashboard, name='export'),
+
+
     # DataJob
     path('data_jobs/', views.data_jobs_list, name='data_jobs_list'),
     path('data_jobs/add/', views.data_job_add, name='data_job_add'),
