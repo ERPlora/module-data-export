@@ -29,3 +29,15 @@ PERMISSIONS = [
 'data_export.run_export',
 'data_export.manage_settings',
 ]
+
+ROLE_PERMISSIONS = {
+    "admin": ["*"],
+    "manager": [
+        "run_export",
+        "run_import",
+        "view_datajob",
+    ],
+    "employee": [
+        "view_datajob",
+    ],
+}
