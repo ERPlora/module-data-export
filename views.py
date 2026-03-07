@@ -3,6 +3,8 @@ Data Import/Export Module Views
 """
 from django.core.paginator import Paginator
 from django.db.models import Q, Count
+from django.http import HttpResponse
+from django.urls import reverse
 from django.shortcuts import get_object_or_404, render as django_render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -113,6 +115,7 @@ def data_jobs_list(request):
     }
 
 @login_required
+@htmx_view('data_export/pages/data_job_add.html', 'data_export/partials/data_job_add_content.html')
 def data_job_add(request):
     hub_id = request.session.get('hub_id')
     if request.method == 'POST':
@@ -136,10 +139,13 @@ def data_job_add(request):
         obj.error_message = error_message
         obj.completed_at = completed_at
         obj.save()
-        return _render_data_jobs_list(request, hub_id)
-    return django_render(request, 'data_export/partials/panel_data_job_add.html', {})
+        response = HttpResponse(status=204)
+        response['HX-Redirect'] = reverse('data_export:data_jobs_list')
+        return response
+    return {}
 
 @login_required
+@htmx_view('data_export/pages/data_job_edit.html', 'data_export/partials/data_job_edit_content.html')
 def data_job_edit(request, pk):
     hub_id = request.session.get('hub_id')
     obj = get_object_or_404(DataJob, pk=pk, hub_id=hub_id, is_deleted=False)
@@ -155,7 +161,7 @@ def data_job_edit(request, pk):
         obj.completed_at = request.POST.get('completed_at') or None
         obj.save()
         return _render_data_jobs_list(request, hub_id)
-    return django_render(request, 'data_export/partials/panel_data_job_edit.html', {'obj': obj})
+    return {'obj': obj}
 
 @login_required
 @require_POST
